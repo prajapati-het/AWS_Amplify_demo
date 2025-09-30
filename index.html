@@ -22,7 +22,8 @@ form.addEventListener('submit', async (e) => {
 e.preventDefault();
 const a = document.getElementById('num1').value;
 const b = document.getElementById('num2').value;
-const apiUrl = 'https://bvtms8bhdi.execute-api.ap-south-1.amazonaws.com/prod'; //
+const apiUrl = 'https://bvtms8bhdi.execute-api.ap-south-1.amazonaws.com/prod/add
+'; //
 replace with your API URL
 try {
 const response = await fetch(apiUrl, {
