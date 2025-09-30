@@ -1,44 +1,61 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Add Two Numbers</title>
-<style>
-body { font-family: Arial; padding: 40px; }
-input { margin: 5px; }
-</style>
+  <title>Add Two Numbers</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 40px; }
+    input { margin: 5px; padding: 8px; }
+    button { padding: 8px 16px; }
+    #result { margin-top: 15px; font-weight: bold; }
+  </style>
 </head>
 <body>
-<h1>Add Two Numbers</h1>
-<form id="addForm">
-<input type="number" id="num1" placeholder="Number 1" required>
-<input type="number" id="num2" placeholder="Number 2" required>
-<button type="submit">Add</button>
-</form>
-<p id="result"></p>
-<script>
-const form = document.getElementById('addForm');
-const result = document.getElementById('result');
-form.addEventListener('submit', async (e) => {
-e.preventDefault();
-const a = document.getElementById('num1').value;
-const b = document.getElementById('num2').value;
-const apiUrl = 'https://bvtms8bhdi.execute-api.ap-south-1.amazonaws.com/prod/add
-'; //
-replace with your API URL
-try {
-const response = await fetch(apiUrl, {
-method: 'POST',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify({ a: parseInt(a), b: parseInt(b) })
-});
+  <h1>Add Two Numbers</h1>
+  <form id="addForm">
+    <input type="number" id="num1" placeholder="Number 1" required>
+    <input type="number" id="num2" placeholder="Number 2" required>
+    <button type="submit">Add</button>
+  </form>
+  <p id="result"></p>
 
-const data = await response.json();
-result.textContent = data.sum !== undefined ? 'Sum: ' + data.sum : 'Error: ' +
-data.error;
-} catch (err) {
-result.textContent = 'Error: ' + err.message;
-}
-});
-</script>
+  <script>
+    const form = document.getElementById('addForm');
+    const result = document.getElementById('result');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const a = parseInt(document.getElementById('num1').value);
+      const b = parseInt(document.getElementById('num2').value);
+
+      if (isNaN(a) || isNaN(b)) {
+        result.textContent = "❌ Please enter valid numbers.";
+        return;
+      }
+
+      // ✅ Make sure this URL is EXACT (no spaces or line breaks)
+      const apiUrl = "https://bvtms8bhdi.execute-api.ap-south-1.amazonaws.com/prod/add";
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ a, b })
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        result.textContent = data.sum !== undefined
+          ? `✅ Sum: ${data.sum}`
+          : `❌ Error: ${data.error || "Unknown error"}`;
+
+      } catch (err) {
+        result.textContent = `⚠️ Request failed: ${err.message}`;
+      }
+    });
+  </script>
 </body>
 </html>
