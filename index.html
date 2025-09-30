@@ -35,6 +35,8 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ a, b })
         });
+		
+		console.log(response);
 
         const data = await response.json();
         result.textContent = data.sum !== undefined
